@@ -124,28 +124,37 @@ expandone vs (Vtx _ (Pt p x) _) (Ed n c) = (Vtx (getvert vs n) (Pt (n:p) (c + x)
 
 -- Udates list, setting present node to expanded
 markexpanded :: [Vertex'] -> Vertex' -> [Vertex']
+-- Guard. Если имя вершины совпадает, то помечаем вершину пройденной
 markexpanded (v:exp) v1 | (printvert v) == (printvert v1) = ((setexpanded v):exp)
+-- иначе рекурсивный вызов с хвостом
 markexpanded (e:exp) v = (e:(markexpanded exp v))
 
+-- Помечает пройденную вершину пройденной
 setexpanded :: Vertex' -> Vertex'
 setexpanded (Vtx v p r) = (Vtx v p True)
 
 -- Udates list, adding expanded nodes and checking distances
+-- Добавляет в список пройденные вершины с самым дешевым путем
 addexpanded :: Mainlist -> [Vertex'] -> Mainlist
 addexpanded m [] = m
 addexpanded m (e:exp) = addexpanded (cheaperpath m e) exp
 
 -- Replace a vertex path by a cheaper path if available
+-- заменяет путь до вершины, самым дешевым, если это возможно
 cheaperpath ::  Mainlist -> Vertex' ->  Mainlist
 cheaperpath (Mls [] _) e = (Mls [e] True)
+-- если имена вершин совпадают, и путь до вершины короче, то в списаой попадает
+-- вершина с дешевым путем
 cheaperpath (Mls (v:vx) b) e | (printvert e) == (printvert v) =
                 if (getcheapest e v) then (Mls (e:vx) True) else (Mls (v:vx) b)
 cheaperpath (Mls (v:vx) b) e = addtomainlist (cheaperpath (Mls vx b) e) v
 
 -- Returns a Vertex' list from a Mainlist
+-- Добавляет вершину в список
 addtomainlist :: Mainlist -> Vertex' ->  Mainlist
 addtomainlist (Mls vs b) v = (Mls (v:vs) b)
 
+-- возвращает True, если список изменился
 prn :: Mainlist -> Bool
 prn (Mls m b) = b
 
