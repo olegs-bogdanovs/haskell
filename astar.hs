@@ -223,7 +223,10 @@ isworthexpanding :: Vertex' -> Vertex' -> Double -> Bool
 isworthexpanding a b c = if (totalcost a b) < c then True else False
 
 -- Returns new cost after a cycle, leaves intact if no path found
+-- Возвращает список вершин с обновленный длинной пети
 getnewcost :: [Vertex'] -> String -> Double -> Double
 getnewcost [] _ x = x
+-- Если имя совпадает и передыдущая стоимость пути выше чем новая, то возвращаем новую стоимость
 getnewcost ((Vtx (Vt name _ _ _) (Pt p x) _): vs) name1 oldcost | name1 == name && x < oldcost = getnewcost vs name1 x
+-- иначе рекурсивный вызов хвоста
 getnewcost (_ : vs) vert oldcost = getnewcost vs vert oldcost
