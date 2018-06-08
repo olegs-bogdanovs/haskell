@@ -103,7 +103,10 @@ getminvert (v:vs) ve | not(notexpanded v) = getminvert vs ve
 getminvert (v:vs) ve = foldl (\acc cur -> if (totalcost cur ve) < (totalcost acc ve) && (notexpanded cur)
 then cur else acc) v vs
 
--- Expand nodes, returns a list of new nodes
+-- Возвращает новые вершины, до которых можно добраться из переданной вершины в аргументе
+-- первый аргумент - список вершин
+-- второй аргумент вершина, из которой нужно будет пройти до след. вершин
+-- возвращает список вершин
 expandall :: [Vertex] -> Vertex' -> [Vertex']
 expandall vs (Vtx (Vt a b c e) p r) = map (expandone vs (Vtx (Vt a b c e) p r)) e
 
