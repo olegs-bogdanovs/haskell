@@ -76,7 +76,9 @@ expansionblock (Nls nodes) (Mls open changed) goal cost =
 -- Возвращает вершину по имени
 -- В агрумент функции передается список вершин и имя вершины
 getvert :: [Vertex] -> String -> Vertex
+-- Guard если имя вершины совпадает, то возвращает вершину
 getvert ((Vt name x y e) : vs) name1 | name1 == name = (Vt name x y e)
+-- иначе рекурсивный вызов с хвостом
 getvert (_ : vs) name = getvert vs name
 
 -- Возвращает вершину по именм
