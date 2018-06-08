@@ -158,8 +158,6 @@ prn (Mls m b) = b
 samename :: String -> Vertex -> Bool
 samename n (Vt name _ _ _) = if (n == name) then True else False
 
-
-
 -- Returns True if string matches the Vertex' name
 samename' :: String -> Vertex' -> Bool
 samename' n1 n = if (n1 == (printvert n)) then True else False
@@ -169,7 +167,12 @@ diffname' :: String -> Vertex' -> Bool
 diffname' a b = not (samename' a b)
 
 -- Returns True if node has not been reached yet
+-- Возвращает True, если данная вершина еще не была пройдена
+-- первый аргемент: вершина, которую нужно проверить
+-- второй аргумент: список пройденных вершин
 notreached :: Vertex' -> Mainlist -> Bool
+-- в filter передается функция которая сравнивает имена вершин
+-- если filter вернет пустой список, значит такая вершина не пройдена
 notreached v (Mls open _) = (null(filter (samename' (printvert v)) open))
 
 -- Returns True if node has not been expanded yet
@@ -182,6 +185,7 @@ notexpanded (Vtx _ (Pt p _) b) = (not b)
 -- Returns the value of g(current)
 -- Возвращает расстояние до пройденной вершины Vertex'
 cost :: Vertex' -> Double
+-- Pattern Matching
 cost (Vtx _ (Pt _ x) _) = x
 
 -- Returns the value of h(current, goal)
@@ -196,10 +200,16 @@ totalcost :: Vertex' -> Vertex' -> Double
 totalcost a b = (cost a) + (heuri a b)
 
 -- Returns true if the first vertex is cheaper than the second
+-- Возвращает True, если первая вершина дешевле чем вторая
 getcheapest :: Vertex' -> Vertex' -> Bool
+-- сравнивает цены пройденных путей x и y
 getcheapest (Vtx _ (Pt _ x) _) (Vtx _ (Pt _ y) _) = if x < y then True else False
 
 -- Tests if the vertex is potentially worth expanding
+-- Проверяет, стоит ли дальше проходить вершины
+-- первый аргумент: первая вершина
+-- второй агрумент: вершина конечного назначения
+-- третий аргумент: максимальная цена, которая доступна при расширении
 isworthexpanding :: Vertex' -> Vertex' -> Double -> Bool
 isworthexpanding a b c = if (totalcost a b) < c then True else False
 
