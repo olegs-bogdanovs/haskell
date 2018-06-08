@@ -82,12 +82,16 @@ getvert (_ : vs) name = getvert vs name
 -- Возвращает вершину по именм
 -- В аргумент функции передается список вершин и имя вершины
 getvert' :: [Vertex'] -> String -> Vertex'
+-- Guard, если имя вершиный совпадает, то возвращаем вершину
 getvert' (v : vs) name | (printvert v) == name = v
+-- иначе рекурсивный вызов с хвостом
 getvert' (_ : vs) name = getvert' vs name
 
 -- Removes a vertex by its name, returns a new list
 -- Удаляет вершины из списка по ее имени
 remvert :: [Vertex'] -> String -> [Vertex']
+-- в filter передается функция, которая возвращает True, если имя вершины отличается. 
+-- в итоге получаем список вершин, которые не содержат имя s
 remvert vx s = filter (diffname' s) vx
 
 -- Returns a vertex with minimal g + h
